@@ -19,4 +19,11 @@ object HListTest {
 
     xs.tail.head: Boolean
   }
+
+  {
+    val xs = 1 :: false :: HNil
+
+    xs.remove[Int].head: Boolean
+    xs.remove[Boolean].head: Int
+  }
 }

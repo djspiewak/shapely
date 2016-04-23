@@ -5,6 +5,9 @@ package object shapely {
   val HNil = HNil0
 
   implicit class HListSyntax[L <: HList](val self: L) extends AnyVal {
+
     def ::[H](head: H): H :: L = HCons(head, self)
+
+    def remove[A](implicit R: Remover[A, L]): R.Out = R(self)
   }
 }
