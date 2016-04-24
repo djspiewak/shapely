@@ -30,3 +30,25 @@ object Remover extends RemoverLowPriorityImplicits {
     def apply(xs: B :: L) = xs.head :: R(xs.tail)
   }
 }
+
+trait Mapper[L <: HList, P <: Poly] {
+  type Out <: HList
+
+  def apply(xs: L): Out
+}
+
+object Mapper {
+  type Aux[L <: HList, P <: Poly, Out0 <: HList] = Mapper[L, P] { type Out = Out0 }
+
+  implicit def base[P <: Poly]: Mapper.Aux[HNil, P, HNil] = new Mapper[HNil, P] {
+    type Out = HNil
+
+    def apply(xs: HNil) = xs
+  }
+
+  implicit def corecurse[A, B, L <: HList, P <: Poly](implicit C: P#Case[A, B], M: Mapper[L, P]): Mapper.Aux[A :: L, P, B :: M.Out] = new Mapper[A :: L, P] {
+    type Out = B :: M.Out
+
+    def apply(xs: A :: L) = C(xs.head) :: M(xs.tail)
+  }
+}

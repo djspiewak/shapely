@@ -9,5 +9,7 @@ package object shapely {
     def ::[H](head: H): H :: L = HCons(head, self)
 
     def remove[A](implicit R: Remover[A, L]): R.Out = R(self)
+
+    def map[P <: Poly](p: P)(implicit M: Mapper[L, P]): M.Out = M(self)
   }
 }

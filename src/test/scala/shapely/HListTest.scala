@@ -26,4 +26,21 @@ object HListTest {
     xs.remove[Int].head: Boolean
     xs.remove[Boolean].head: Int
   }
+
+  {
+    val xs = 1 :: false :: HNil
+
+    object doubleFlip extends Poly {
+      implicit val i = at[Int] { _ * 2 }
+      implicit val b = at[Boolean] { !_ }
+    }
+
+    object toString extends Poly {
+      implicit def default[A] = at[A] { _.toString }
+    }
+
+    xs map doubleFlip
+
+    xs map toString head: String
+  }
 }
