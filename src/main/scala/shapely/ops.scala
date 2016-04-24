@@ -52,3 +52,18 @@ object Mapper {
     def apply(xs: A :: L) = C(xs.head) :: M(xs.tail)
   }
 }
+
+trait ToInt[N <: Nat] {
+  val value: Int
+}
+
+object ToInt {
+
+  implicit def base: ToInt[Zero] = new ToInt[Zero] {
+    val value = 0
+  }
+
+  implicit def succ[N <: Nat](implicit N: ToInt[N]): ToInt[Succ[N]] = new ToInt[Succ[N]] {
+    val value = 1 + N.value
+  }
+}
