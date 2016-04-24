@@ -43,4 +43,11 @@ object HListTest {
 
     xs map toString head: String
   }
+
+  {
+    val xs = 1 :: false :: HNil
+
+    xs.nth(0)
+    xs.nth(1)
+  }
 }

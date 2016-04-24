@@ -4,7 +4,9 @@ import scala.language.experimental.macros
 
 import scala.reflect.macros.whitebox
 
-trait Nat
+trait Nat {
+  type N <: Nat
+}
 
 object Nat {
 
@@ -28,6 +30,10 @@ class NatMacros(val c: whitebox.Context) {
   }
 }
 
-object Zero0 extends Nat
+object Zero0 extends Nat {
+  type N = Zero0.type
+}
 
-class Succ[N <: Nat](n: N) extends Nat
+class Succ[N0 <: Nat](n: N0) extends Nat {
+  type N = Succ[N0]
+}

@@ -53,6 +53,28 @@ object Mapper {
   }
 }
 
+trait Nther[L <: HList, N <: Nat] {
+  type Out
+
+  def apply(xs: L): Out
+}
+
+object Nther {
+  type Aux[L <: HList, N <: Nat, Out0] = Nther[L, N] { type Out = Out0 }
+
+  implicit def base[A, L <: HList]: Nther.Aux[A :: L, Zero, A] = new Nther[A :: L, Zero] {
+    type Out = A
+
+    def apply(xs: A :: L) = xs.head
+  }
+
+  implicit def corecurse[A, L <: HList, N <: Nat](implicit N: Nther[L, N]): Nther.Aux[A :: L, Succ[N], N.Out] = new Nther[A :: L, Succ[N]] {
+    type Out = N.Out
+
+    def apply(xs: A :: L) = N(xs.tail)
+  }
+}
+
 trait ToInt[N <: Nat] {
   val value: Int
 }
