@@ -10,7 +10,7 @@ trait Nat {
 
 object Nat {
 
-  implicit def materialize(i: Int): Nat = macro NatMacros.materialize
+  implicit def fromInt(i: Int): Nat = macro NatMacros.materialize
 
   def toInt[N <: Nat](implicit N: ToInt[N]): Int = N.value
 }
@@ -20,12 +20,15 @@ class NatMacros(val c: whitebox.Context) {
   import c.universe._
 
   def materialize(i: Tree): Tree = {
-    def loop(n: Int, acc: Tree): Tree = if (n <= 0) acc else loop(n - 1, q"new shapely.Succ($acc)")
+    def loop(n: Int, acc: Tree): Tree =
+      if (n <= 0) acc else loop(n - 1, q"shapely.Succ($acc)")
 
     i match {
-      case Literal(Constant(n: Int)) => loop(n, q"shapely.Zero")
+      case Literal(Constant(n: Int)) if n >= 0 =>
+        loop(n, q"shapely.Zero")
 
-      case _ => c.abort(c.enclosingPosition, s"expression $i is not a non-negative integer literal")
+      case _ =>
+        c.abort(c.enclosingPosition, s"not a natural number")
     }
   }
 }
@@ -34,6 +37,6 @@ object Zero0 extends Nat {
   type N = Zero0.type
 }
 
-class Succ[N0 <: Nat](n: N0) extends Nat {
+case class Succ[N0 <: Nat](n: N0) extends Nat {
   type N = Succ[N0]
 }

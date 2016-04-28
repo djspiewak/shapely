@@ -3,10 +3,10 @@ package shapely
 object NatTest {
 
   {
-    Nat.materialize(2)
+    Nat.fromInt(2)
   }
 
   {
-    Nat.materialize(5).toInt
+    Nat.fromInt(5).toInt
   }
 }

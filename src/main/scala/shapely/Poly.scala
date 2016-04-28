@@ -2,7 +2,7 @@ package shapely
 
 trait Poly {
 
-  def at[A] = new Caser[A]
+  final def at[A] = new Caser[A]
 
   def apply[A, B](a: A)(implicit C: this.Case[A, B]): B = C(a)
 
@@ -12,7 +12,7 @@ trait Poly {
     }
   }
 
-  trait Case[A, B] {
+  sealed trait Case[A, B] {
     def apply(a: A): B
   }
 }
