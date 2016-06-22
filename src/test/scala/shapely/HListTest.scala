@@ -1,6 +1,6 @@
 package shapely
 
-object HListTest extends App {
+object HListTest {
 
   // result should have proper type
   {
