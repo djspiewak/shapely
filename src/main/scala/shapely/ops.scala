@@ -7,27 +7,27 @@ trait Remover[A, L <: HList] {
 }
 
 private[shapely] trait RemoverLowPriorityImplicits {
+  type Aux[A, L <: HList, O <: HList] = Remover[A, L] { type Out = O }
 
-  implicit def base[A, L <: HList]: Remover.Aux[A, A :: L, L] = new Remover[A, A :: L] {
-    type Out = L
+  implicit def nilRemove[A]: Remover[A, HNil] = new Remover[A, HNil] {
+    type Out = HNil
 
-    def apply(xs: A :: L) = xs.tail
-  }
-}
-
-object Remover extends RemoverLowPriorityImplicits {
-  type Aux[A, L <: HList, Out0 <: HList] = Remover[A, L] { type Out = Out0 }
-
-  implicit def corecurseRemove[A, L <: HList](implicit R: Remover[A, L]): Remover.Aux[A, A :: L, R.Out] = new Remover[A, A :: L] {
-    type Out = R.Out
-
-    def apply(xs: A :: L) = R(xs.tail)
+    def apply(xs: HNil) = HNil
   }
 
   implicit def corecurseRebuild[A, B, L <: HList](implicit R: Remover[A, L]): Remover.Aux[A, B :: L, B :: R.Out] = new Remover[A, B :: L] {
     type Out = B :: R.Out
 
     def apply(xs: B :: L) = xs.head :: R(xs.tail)
+  }
+}
+
+object Remover extends RemoverLowPriorityImplicits {
+
+  implicit def corecurseRemove[A, L <: HList](implicit R: Remover[A, L]): Remover.Aux[A, A :: L, R.Out] = new Remover[A, A :: L] {
+    type Out = R.Out
+
+    def apply(xs: A :: L) = R(xs.tail)
   }
 }
 
