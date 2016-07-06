@@ -9,10 +9,10 @@ trait Remover[A, L <: HList] {
 private[shapely] trait RemoverLowPriorityImplicits {
   type Aux[A, L <: HList, O <: HList] = Remover[A, L] { type Out = O }
 
-  implicit def corecurseEnd[A]: Remover[A, HNil] = new Remover[A, HNil] {
+  implicit def corecurseEnd[A]: Remover.Aux[A, HNil, HNil] = new Remover[A, HNil] {
     type Out = HNil
 
-    def apply(xs: HNil) = HNil
+    def apply(xs: HNil) = xs
   }
 
   implicit def corecurseRebuild[A, B, L <: HList](implicit R: Remover[A, L]): Remover.Aux[A, B :: L, B :: R.Out] = new Remover[A, B :: L] {

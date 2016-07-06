@@ -34,38 +34,38 @@ object HListTest {
   {
     val xs = 1 :: false :: HNil
 
-    xs.remove[Int].head: Boolean // TODO: xs.remove[Int]: Boolean :: HNil
-    xs.remove[Boolean].head: Int // TODO: xs.remove[Boolean]: Int :: HNil
+    xs.remove[Int]: Boolean :: HNil
+    xs.remove[Boolean]: Int :: HNil
   }
 
   // remove should work for type that is not contained
   {
     val xs = 1 :: false :: HNil
 
-    xs.remove[String].head: Int // TODO: xs.remove[String]: Boolean :: Int :: HNil
+    xs.remove[String]: Int :: Boolean :: HNil
   }
 
   // remove should work for multiple instance of the same type (1)
   {
     val xs = 1 :: 1 :: false :: HNil
 
-    xs.remove[Int].head: Boolean // TODO: xs.remove[Int]: Boolean :: HNil
-    xs.remove[Boolean].head: Int // TODO: xs.remove[Boolean]: Int :: Int :: HNil
+    xs.remove[Int]: Boolean :: HNil
+    xs.remove[Boolean]: Int :: Int :: HNil
   }
 
   // remove should work for multiple instance of the same type (2)
   {
     val xs = 1 :: false :: 1 :: HNil
 
-    xs.remove[Int].head: Boolean // TODO: xs.remove[Int]: Boolean :: HNil
-    xs.remove[Boolean].head: Int // TODO: xs.remove[Boolean]: Int :: Int :: HNil
+    xs.remove[Int]: Boolean :: HNil
+    xs.remove[Boolean]: Int :: Int :: HNil
   }
 
   // remove should work for empty HList
   {
     val xs = HNil
 
-    xs.remove[Int] // TODO: xs.remove[Int]: HNil
+    xs.remove[Int]: HNil
   }
 
   // map should process each element
