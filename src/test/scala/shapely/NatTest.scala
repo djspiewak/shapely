@@ -1,12 +1,24 @@
 package shapely
 
-object NatTest {
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
-  {
-    Nat.fromInt(2)
-  }
+class NatTest extends AnyWordSpec with Matchers {
 
-  {
-    Nat.fromInt(5).toInt
+  "Nat" should {
+
+    "convert from integers" in {
+      val result = Nat.fromInt(2)
+
+      result mustBe Succ(Succ(Zero))
+    }
+
+    "convert to integers" in {
+      val nat = Nat.fromInt(5)
+
+      val result = nat.toInt
+
+      result mustBe 5
+    }
   }
 }
