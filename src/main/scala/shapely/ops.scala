@@ -9,7 +9,7 @@ trait Remover[A, L <: HList] {
 private[shapely] trait RemoverLowPriorityImplicits {
   type Aux[A, L <: HList, O <: HList] = Remover[A, L] { type Out = O }
 
-  implicit def corecurseEnd[A]: Remover.Aux[A, HNil, HNil] =
+  implicit def base[A]: Remover.Aux[A, HNil, HNil] =
     new Remover[A, HNil] {
       override type Out = HNil
 
@@ -53,7 +53,7 @@ object Mapper {
       override def apply(xs: HNil): HNil = xs
     }
 
-  implicit def corecurse[A, B, L <: HList, P <: Poly](implicit C: P#Case[A, B], M: Mapper[L, P]): Mapper.Aux[A :: L, P, B :: M.Out] =
+  implicit def recurse[A, B, L <: HList, P <: Poly](implicit C: P#Case[A, B], M: Mapper[L, P]): Mapper.Aux[A :: L, P, B :: M.Out] =
     new Mapper[A :: L, P] {
       override type Out = B :: M.Out
 
@@ -79,7 +79,7 @@ object Nther {
         xs.head
     }
 
-  implicit def corecurse[A, L <: HList, N <: Nat](implicit N: Nther[L, N]): Nther.Aux[A :: L, Succ[N], N.Out] =
+  implicit def recurse[A, L <: HList, N <: Nat](implicit N: Nther[L, N]): Nther.Aux[A :: L, Succ[N], N.Out] =
     new Nther[A :: L, Succ[N]] {
       override type Out = N.Out
 
